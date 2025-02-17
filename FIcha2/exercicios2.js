@@ -68,7 +68,8 @@ function ContarVogais(str) {
     console.log(ContarVogais("Hoje"));
     */
 
-    // ex3 mais rapido
+
+// ex3 mais rapido
 /*
     var str = "";
 
@@ -89,8 +90,9 @@ function ContarVogais(str) {
         console.log(ContarVogais("Hoje"));
         */
 
-    // ex4
-    
+
+
+// ex4
     /*
     str = "";
     char = "";
@@ -130,6 +132,10 @@ function CriarRetangulo(width, height){
 console.log(CriarRetangulo("*"))
 */
 
+
+
+// ex 6 triangulo
+/*
 var line = "";
 var width = 20;
 
@@ -141,3 +147,30 @@ function CriarRetangulo(width, height){
 
 }
 console.log(CriarRetangulo(10,10))
+*/
+
+
+
+// ex 7
+var line = "";
+var width = 20;
+var height = 10;
+
+function CriarRetangulo(width, height){
+    for(let i = 0; i < width; i++){
+        if ( i == 0 && i == width - 1){
+            line +="*";
+        }
+        else ;
+        line += " ";
+    }
+    for(let j = 0; j < height; j++){
+        if ( j == 0 && i == height - 1){
+            line +="*";
+        }
+        else ;
+        line += " ";
+        console.log(line);
+    }
+}
+console.log(CriarRetangulo("*"))
