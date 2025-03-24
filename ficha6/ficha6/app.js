@@ -1,18 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
 const fs = require('fs');
+const express = require('express');
 const PORT = 3000;
+var app = express();
 const LOG_FILE = 'log.txt';
 
-// info log
+
+
+// info do ficheiro log
 const logEntry = `${new Date().toISOString()}, ${req.method}, ${req.url}\n`;
 
 
