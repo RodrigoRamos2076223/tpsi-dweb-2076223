@@ -1,0 +1,17 @@
+{
+  "name": "ficha9",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+  "swagger-autogen": "node swagger.js",
+  "dev": "npm run swagger-autogen && node app.js"
+  },
+  "author": "Rodrigo",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "swagger-autogen": "^2.23.7"
+  }
+}
