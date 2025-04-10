@@ -33,17 +33,23 @@ app.post('/product', (req, res) => {
     var { name, barcode, department, review, description, weight, price, created, comment } = req.body;
     connection.query(`INSERT INTO product (name, barcode, department, review, description, weight, price, created, comment) VALUES (?, ?, ?, ?, ?, ?, ?, CURTIME(), ?)`, [name, barcode, department, review, description, weight, price, JSON.stringify(comment)], function (error, results, fields) {
         if (error) throw error
+        
+        res.send("Produto inserido com sucesso com o id: " + results.insertId);
+    });
+});
 
-        res.send("User inserted with id: " + res.insertID);
+app.get('/product/departamento/:dep', (req, res) => {
+    var dep = req.params.dep;
+    connection.query('SELECT * FROM product WHERE department = ?', [dep], function (error, results, fields) {
+        if (error) throw error;
+
+        res.send(results);
     });
 });
 
 app.put('/product/desconto', (req, res) => {
-    var { id, percentagem } = req.body;
-    if (!id || !percentagem) {
-        res.status(400).send("ID and Desconto are required");
-        return;
-    }
+    var id = req.query.id;
+    var percentagem = req.query.percentagem;
     connection.query('UPDATE product SET price = price - (price * ? / 100) WHERE id = ?', [percentagem, id], function (error, results, fields) {
         if (error) {
             res.send("Erro ao aplicar desconto");
@@ -53,36 +59,82 @@ app.put('/product/desconto', (req, res) => {
     });
 });
 
-app.get('/product/:data', (req, res) => {
+app.get('/product/data/:data', (req, res) => {
     var data = req.params.data;
     if (!data) {
         res.status(400).send("A data tem de ser no formato AAAA-MM-DD");
     }
-    connection.query('SELECT * FROM product WHERE created = ?', [data], function (error, results, fields) {
-        if (error) {
-            res.send("Erro ao procurar o produto com a data: " + data);
-        } else {
-            res.send("Produto encontrado com a data: " + data + ": " + res.json(results));
-        }
+    connection.query('SELECT * FROM product WHERE DATE(created) = ?', [data], function (error, results, fields) {
+        if (error) throw error
+
+        res.send(results);
     });
 });
-// app.delete('/persons', (req, res) => {
-//     var { id, firstname, lastname, profession, age } = req.body;
-//     connection.query('DELETE FROM persons where id = 2', function (error, results, fields) {
-//         if (error) throw error
 
-//         res.send(results)
-//     });
-// });
+// ------------------------ Parte B ------------------------ 
 
-// app.get('/persons/:id', (req, res) => {
-//     var { id, firstname, lastname, profession, age } = req.body;
-//     connection.query('SELECT * FROM persons WHERE id = 3', function (error, results, fields) {
-//         if (error) throw error
+app.get('/product/id', (req, res) => {
+    var id = req.query.id;
+    connection.query('SELECT * FROM product WHERE id = ?', [id], function (error, results, fields) {
+        if (error) throw error;
+        
+        res.send(results);
+    });
+});
 
-//         res.send(results);
-//     });
-// });
+app.delete('/product/delete/:id', (req, res) => {
+     var id  = req.params.id;
+     connection.query('DELETE FROM product WHERE id = ?', [id], function (error, results, fields) {
+        if (error) {
+            res.send("Erro ao apagar produto com id: " + id);
+        } else {
+            res.send("Produto apagado com sucesso");
+        }
+     });
+ });
+
+app.post('/product/filtrar', (req, res) => {
+    var { palavraChave } = req.body;
+    connection.query('SELECT * FROM product WHERE description LIKE ?', [`%${palavraChave}%`], function (error, results, fields) {
+        if (error) throw error
+
+        res.send(results);
+    });
+});
+
+app.put('/product/comentario', (req, res) => {
+    var { id, comentario } = req.body;
+    connection.query('SELECT comment FROM product WHERE id = ?', [id], function (error, results, fields) {
+        if (error) throw error;
+
+        var comentarios = [];
+        if (results[0].comment) {
+            comentarios = JSON.parse(results[0].comment);
+        }
+        comentarios.push(comentario);
+        connection.query('UPDATE product SET comment = ? WHERE id = ?', [JSON.stringify(comentarios), id], function (error, results, fields) {
+            if (error) throw error;
+
+            connection.query('SELECT * FROM product WHERE id = ?', [id], function (error, results, fields) {
+                if (error) throw error;
+
+                res.send(results[0]);
+            });
+        });
+    });
+});
+
+app.get('/product/ordenar/preco', (req, res) => {
+    connection.query('SELECT * FROM product', function (error, results, fields) {
+        if (error) throw error;
+
+        results.sort(function(a, b) {
+            return a.price - b.price;
+        });
+        res.send(results);
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Servidor ligou! ${port}`)
