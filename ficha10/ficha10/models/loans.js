@@ -38,18 +38,8 @@ module.export = (sequelize) => {
        timestap: false
     });
 
-    Loan.associate = (models) => {
-        Loan.belongsTo(models.User, {
-            foreignKey: 'user_id',
-            as: 'user'
-        });
-    Loan.associate = (models) => {
-        Loan.belongsTo(models.Book, {
-            foreignKey: 'book_id',
-            as: 'book'
-            });
-    };
+    
     return Loan;
    
-}}
+}
 

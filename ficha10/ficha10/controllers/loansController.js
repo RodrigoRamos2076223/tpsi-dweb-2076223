@@ -1,8 +1,16 @@
-const Loan = require('../sequilize').Loan;
+const Loan = require('../db_sequelize').Loan;
 
-exports.getAllBook = function (request, response, next) {
-    Loan.findAll()
-    .then(loans => {
-        response.render('loan', {title: 'Loans', data: loans})
-    });
+async function getAllLoans(req, res, next){
+    var loans = await Loan.findAll();
+    res.send(loans);
+}
+
+async function getAllLoansFull(req, res, next){
+    var loans = await Loan.findAll({include: [{model: user}, {model : Book}]})
+    res.send(loans);
 };
+
+module.exports = {
+    getAllLoans,
+    getAllLoansFull
+}

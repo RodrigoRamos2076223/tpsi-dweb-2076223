@@ -1,8 +1,11 @@
-const Book = require('../sequilize').Book;
+const Book = require('../db_sequelize').Book;
 
-exports.getAllBook = function (request, response, next) {
-    Book.findAll()
-    .then(books => {
-        response.render('book', {title: 'Books', data: books})
-    });
+async function getAllBooks(req, res){
+    var books = await Book.findAll();
+    res.send(books);
+
 };
+
+module.exports = {
+    getAllBooks
+}
