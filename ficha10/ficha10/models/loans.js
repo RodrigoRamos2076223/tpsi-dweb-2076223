@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize")
 
-module.export = (sequelize) => {
+module.exports = (sequelize, DataTypes) => {
     const Loan = sequelize.define('loan', {
         loan_id: {
             type: DataTypes.INTEGER,
@@ -19,9 +19,9 @@ module.export = (sequelize) => {
         book_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            references:{
+            references: {
                 model: "books",
-                keu: "book_id"
+                key: "book_id"
             }
         },
         loan_date: {
@@ -33,13 +33,12 @@ module.export = (sequelize) => {
             allowNull: false
         }
     },
-    {
-       tableName: "loans",
-       timestap: false
-    });
+        {
+            tableName: "loans",
+            timestamps: false
+        });
 
-    
     return Loan;
-   
-}
+
+};
 
