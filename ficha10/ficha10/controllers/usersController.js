@@ -2,24 +2,28 @@ const User = require('../db_sequelize').User
 
 async function getAllUsers(req, res){
     var users = await User.findAll();
-    res.send(users)
+    res.send(users);
 }
 
-function getUserById(req, res){
-    
+async function getUserById(req, res){
+    const user = await User.findByIdd(req.params.id);
+    res.send(user);
 }
 
-function createUser(req, res){
-    
+async function createUser(req, res){
+    const newUser = await User.create(req.body);
+    res.send(newUser)
 }
 
-function deleteUser(req, res){
-    
+async function deleteUser(req, res){
+    const user = await User.findByIdd(req.params.id);
+    await user.destroy();
 }
 
-
-function updateUser(req, res){
-    
+async function updateUser(req, res){
+    const user = await User.findByIdd(req.params.id);
+    await user.update(req.body);
+    res.send(user)
 }
 
 
