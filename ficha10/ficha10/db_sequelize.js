@@ -1,10 +1,5 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const sequelize = new Sequelize('mysql://root:password@localhost:3306/ficha10')
-// const { Sequelize, Model, DataTypes } = require('sequelize');
-// const sequelize = new Sequelize('ficha10', 'root', 'password', {
-//     host: 'localhost',
-//     dialect: 'mysql'
-// });
 
 const User = require("./models/users")(sequelize, DataTypes);
 const Book = require("./models/books")(sequelize, DataTypes);
@@ -26,7 +21,20 @@ Loan.belongsTo(Book, {foreignKey: 'book_id'});
             address: 'funchal',
             phone_number: 123456789
         });
-        console.log('Database synchronized and test user created');
+        const book = await Book.create({
+            title: 'Wasd',
+            author_name: 'Rodrigo',
+            publication_date: 2025-05-05,
+            genre: 'educational',
+            available_copies: 100
+        });
+        const loan = await Loan.create({
+            user_id: 1,
+            book_id: 1,
+            loan_date: 2025-05-05,
+            return_date: 2025-05-10
+        }); 
+        console.log('Database synchronized');
     } catch (error) {
         console.error('Error synchronizing database:', error);
     }
