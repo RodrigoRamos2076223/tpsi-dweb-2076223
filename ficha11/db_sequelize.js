@@ -18,6 +18,7 @@ Loan.belongsTo(Book, {foreignKey: 'book_id'});
             first_name: 'Rodrigo',
             last_name: 'Ramos',
             email: 'rodrigo@asd.com',
+            password: 'test',
             address: 'funchal',
             phone_number: 123456789
         });
@@ -41,8 +42,7 @@ Loan.belongsTo(Book, {foreignKey: 'book_id'});
 })();
 
 module.exports = {
-    Loan,
-    Book,
     User,
-    sequelize
+    Book,
+    Loan
 }
