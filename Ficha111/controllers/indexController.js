@@ -35,24 +35,16 @@ exports.login = function (req, res) {
         }
     }).then(user => {
         if (user == null) {
-            req.flash('loginMessage', 'No user found with that e-mail.'); // req.flash is the way to set flashdata using connect-flash
-            res.redirect('/login');
+           res.status(401).json({message: 'No user found with that email.'});
         }
         else if (user.password != password) {
-            req.flash('loginMessage', 'Oops! Wrong password.'); // create the loginMessage and save it to session as flashdata{
-            res.redirect('/login');
+            res.status(401).json({message: 'Wrong password.'});
         } else {
             const token = auth.generateAccessToken(email, password);
-            req.session.user = user;
-            req.session.token = token;            
-            res.cookie('access_token', token, {
-                expires: new Date(Date.now() + 8 * 3600000) // cookie will be removed after 8 hours
-            }).redirect('/profile');
+            res.json({ bearer_token: token });
         }
     }).catch(function (err) {
-        // handle error;
-        req.flash('loginMessage', err); // req.flash is the way to set flashdata using connect-flash    
-        console.log(err);               
-        res.redirect('/login');
-    });
+        res.status(500).json({message: err});
+    });    
+    
 }
