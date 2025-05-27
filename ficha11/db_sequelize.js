@@ -1,5 +1,11 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('mysql://root:password@localhost:3306/ficha11')
+const sequelize = new Sequelize('mysql://root:password@localhost:3306/ficha11', {
+    dialectOptions: {
+        ssl: {
+            require: true
+        }
+    }
+})
 
 const User = require("./models/users")(sequelize, DataTypes);
 const Book = require("./models/books")(sequelize, DataTypes);
